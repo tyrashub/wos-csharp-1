@@ -1,0 +1,42 @@
+@model MovieDetailsViewModel;
+
+@{
+    var userId = Model.UserId;
+    var movie = Model.Movie;
+    var rating = Model.Rating;
+    ViewData["Title"] = "Movie Details";
+}
+
+<section>
+    <h1 class="display-4 mb-3">Movie Details</h1>
+    <a href="/movies/new" class="mb-3">Add a New Movie</a>
+    <h2 class="display-6 mb-3">@movie.Title</h2>
+    <div class="row">
+        <div class="col">
+            <p>
+                <strong>Genre: </strong>
+                @movie.Genre
+            </p>
+            <p>
+                <strong>Release Date: </strong>
+                @movie.ReleaseDate.Value.ToString("MMMM d, yyyy")
+            </p>
+            <p>
+                <strong>Synopsis:</strong>
+            </p>
+            <p>@movie.Synopsis</p>
+            @if (movie.UserId == userId)
+            {
+                <a href="/movies/@movie.MovieId/edit">Edit</a>
+                <form asp-action="DeleteMovie" asp-controller="Movie" asp-route-movieId="@movie.MovieId" method="post">
+                    <button type="submit" class="btn btn-sm btn-primary">Delete</button>
+                </form>
+            }
+        </div>
+        <div class="col">
+            <h3>Average Rating: @movie.Average</h3>
+            <p>@movie.Ratings.Count users have rated this movie</p>
+            @await Html.PartialAsync("_AddRating", rating)
+        </div>
+    </div>
+</section>
